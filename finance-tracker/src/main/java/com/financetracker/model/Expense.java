@@ -2,6 +2,7 @@ package com.financetracker.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import java.math.BigDecimal;
@@ -12,8 +13,8 @@ import java.util.UUID;
 @Entity
 public class Expense {
 
-    @Id
-    @GeneratedValue
+    @Id  // This annotation indicates that the field 'id' is the primary key of the entity.
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String description;
     private BigDecimal amount;
@@ -27,6 +28,9 @@ public class Expense {
         this.category = category;
         this.date = date;
     }
+
+    public Expense() {}
+
 
     public UUID getId() {
         return id;
