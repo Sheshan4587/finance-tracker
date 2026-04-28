@@ -40,8 +40,8 @@ public class ExpenseService {
         if (expense == null) {
             throw new IllegalArgumentException("Expense cannot be null");
 
-        }else{
-            //In here
+        } else {
+            //In here, we are creating a new Expense entity using the data from the ExpenseRequestDTO. We then save this entity to the database using the repository's save method, which returns the saved entity (including any generated ID). Finally, we create and return an ExpenseResponseDTO using the properties of the saved Expense.
             Expense save = repository.save(new Expense(
                     expense.getDescription(),
                     expense.getAmount(),
@@ -59,10 +59,34 @@ public class ExpenseService {
         }
     }
 
+    public ExpenseResponseDTO updateExpense(@Valid ExpenseRequestDTO expense, UUID id) {
+        Expense find = repository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Expense not found with id " + id)
+        );
+
+        find.setDescription(expense.getDescription());
+        find.setAmount(expense.getAmount());
+        find.setCategory(expense.getCategory());
+        find.setDate(expense.getDate());
+
+        Expense save = repository.save(find);
+
+        return new ExpenseResponseDTO(
+                save.getId(),
+                save.getDescription(),
+                save.getAmount(),
+                save.getCategory(),
+                save.getDate()
+        );
+
+
+    }
+
+
     public void deleteExpense(UUID id) {
         if (repository.existsById(id)) {
             repository.deleteById(id);
-        }else{
+        } else {
             throw new ResourceNotFoundException("Expense not found" + id);
         }
 

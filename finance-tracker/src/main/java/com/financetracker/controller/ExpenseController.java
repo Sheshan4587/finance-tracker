@@ -34,6 +34,13 @@ public class ExpenseController {
         return ResponseEntity.status(201).body(service.saveExpense(expense));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ExpenseResponseDTO> updateExpense(@Valid @RequestBody ExpenseRequestDTO expense, @PathVariable UUID id) {
+        // @PathVariable is for extracting the id from the URL path, and @RequestBody is for populating the expense object with the data from the request body.
+        // ResponseEntity is used to return a response with a specific HTTP status code and body. In this case, we are returning an HTTP 200 OK status with the updated expense in the response body.
+        return ResponseEntity.ok(service.updateExpense(expense,id));
+        }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteExpense(@PathVariable UUID id) {
         // @PathVariable means that the id will be extracted from the URL path.
