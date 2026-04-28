@@ -2,6 +2,7 @@ package com.financetracker.controller;
 
 import com.financetracker.model.Expense;
 import com.financetracker.service.ExpenseService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class ExpenseController {
     }
 
     @PostMapping
-    public ResponseEntity<Expense> createExpense(@RequestBody Expense expense) {
+    public ResponseEntity<Expense> createExpense(@Valid @RequestBody Expense expense) {
         // @RequestBody means that the expense object will be populated with the data from the request body, which is expected to be in JSON format.
         return ResponseEntity.status(201).body(service.saveExpense(expense));
     }
