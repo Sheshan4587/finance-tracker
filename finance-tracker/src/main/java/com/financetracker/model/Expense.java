@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,9 +17,17 @@ public class Expense {
     @Id  // This annotation indicates that the field 'id' is the primary key of the entity.
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @NotBlank
     private String description;
+
+    @NotNull
     private BigDecimal amount;
+
+    @NotNull
     private String category;
+
+    @NotNull
     private LocalDate date;
 
     public Expense(UUID id, String description, BigDecimal amount, String category, LocalDate date) {
