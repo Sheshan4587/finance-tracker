@@ -1,5 +1,7 @@
 package com.financetracker.controller;
 
+import com.financetracker.dto.ExpenseRequestDTO;
+import com.financetracker.dto.ExpenseResponseDTO;
 import com.financetracker.model.Expense;
 import com.financetracker.service.ExpenseService;
 import jakarta.validation.Valid;
@@ -20,13 +22,14 @@ public class ExpenseController {
         this.service = service;
     }
     @GetMapping
-    public ResponseEntity<List<Expense>> getAllExpenses() {
+    public ResponseEntity<List<ExpenseResponseDTO>> getAllExpenses() {
+        // This Method is for
         // ResponseEntity is use for returning a response with a specific HTTP status code and body. In this case, we are returning an HTTP 200 OK status with the list of expenses in the response body.
         return ResponseEntity.ok(service.getAllExpenses());
     }
 
     @PostMapping
-    public ResponseEntity<Expense> createExpense(@Valid @RequestBody Expense expense) {
+    public ResponseEntity<ExpenseResponseDTO> createExpense(@Valid @RequestBody ExpenseRequestDTO expense) {
         // @RequestBody means that the expense object will be populated with the data from the request body, which is expected to be in JSON format.
         return ResponseEntity.status(201).body(service.saveExpense(expense));
     }

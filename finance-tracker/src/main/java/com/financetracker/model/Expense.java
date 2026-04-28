@@ -41,6 +41,13 @@ public class Expense {
 
     public Expense() {}
 
+    public Expense(String description, BigDecimal amount, String category, LocalDate date) {
+        this.description = description;
+        this.amount = amount;
+        this.category = category;
+        this.date = date;
+    }
+
 
     public UUID getId() {
         return id;

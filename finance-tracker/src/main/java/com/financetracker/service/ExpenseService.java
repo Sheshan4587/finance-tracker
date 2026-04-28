@@ -1,8 +1,11 @@
 package com.financetracker.service;
 
+import com.financetracker.dto.ExpenseRequestDTO;
+import com.financetracker.dto.ExpenseResponseDTO;
 import com.financetracker.exception.ResourceNotFoundException;
 import com.financetracker.model.Expense;
 import com.financetracker.repository.ExpenseRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,19 +20,42 @@ public class ExpenseService {
         this.repository = repository;
     }
 
-    public List<Expense> getAllExpenses() {
+    // This method is for retrieving all expenses. It uses the ExpenseRepository to fetch all Expense entities from the database, then maps each Expense to an ExpenseResponseDTO and returns a list of these DTOs. The mapping is done using Java Streams, where each Expense is transformed into an ExpenseResponseDTO by extracting its properties and passing them to the DTO constructor.
+    public List<ExpenseResponseDTO> getAllExpenses() {
         // This is a placeholder implementation. In a real application, you would retrieve expenses from a database.
-        return repository.findAll();
+        return repository.findAll().stream()
+                .map(expense -> new ExpenseResponseDTO(
+                        expense.getId(),
+                        expense.getDescription(),
+                        expense.getAmount(),
+                        expense.getCategory(),
+                        expense.getDate()
+                ))
+                .toList();
 
     }
 
-    // This method is a placeholder for saving an expense.
-    public Expense saveExpense(Expense expense) {
+    // This method is responsible for saving a new expense. It takes an ExpenseRequestDTO as input, validates it, and then saves it to the database using the ExpenseRepository. If the input is valid, it creates a new Expense entity, saves it, and returns an ExpenseResponseDTO with the saved expense's details. If the input is null, it throws an IllegalArgumentException.
+    public ExpenseResponseDTO saveExpense(@Valid ExpenseRequestDTO expense) {
         if (expense == null) {
             throw new IllegalArgumentException("Expense cannot be null");
 
         }else{
-            return repository.save(expense);
+            //In here
+            Expense save = repository.save(new Expense(
+                    expense.getDescription(),
+                    expense.getAmount(),
+                    expense.getCategory(),
+                    expense.getDate()
+            ));
+
+            return new ExpenseResponseDTO(
+                    save.getId(),
+                    save.getDescription(),
+                    save.getAmount(),
+                    save.getCategory(),
+                    save.getDate()
+            );
         }
     }
 
