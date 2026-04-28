@@ -1,5 +1,6 @@
 package com.financetracker.service;
 
+import com.financetracker.exception.ResourceNotFoundException;
 import com.financetracker.model.Expense;
 import com.financetracker.repository.ExpenseRepository;
 import org.springframework.stereotype.Service;
@@ -24,12 +25,21 @@ public class ExpenseService {
 
     // This method is a placeholder for saving an expense.
     public Expense saveExpense(Expense expense) {
-        return repository.save(expense);
+        if (expense == null) {
+            throw new IllegalArgumentException("Expense cannot be null");
 
+        }else{
+            return repository.save(expense);
+        }
     }
 
     public void deleteExpense(UUID id) {
-        repository.deleteById(id);
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+        }else{
+            throw new ResourceNotFoundException("Expense not found" + id);
+        }
+
 
     }
 
